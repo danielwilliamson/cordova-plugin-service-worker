@@ -38,6 +38,8 @@
                 <param name="onload" value="true" />
             </feature>
         </config-file>
+        <header-file src="src/ios/NSData+Base64.h" />
+        <source-file src="src/ios/NSData+Base64.m" />
         <header-file src="src/ios/CDVServiceWorker.h" />
         <source-file src="src/ios/CDVServiceWorker.m" />
         <header-file src="src/ios/FetchConnectionDelegate.h" />

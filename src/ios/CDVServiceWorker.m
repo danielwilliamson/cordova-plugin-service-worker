@@ -20,6 +20,7 @@
 #import <Cordova/CDV.h>
 #import <JavaScriptCore/JavaScriptCore.h>
 #import <CommonCrypto/CommonDigest.h>
+#import "NSData+Base64.h"
 #import "CDVServiceWorker.h"
 #import "FetchConnectionDelegate.h"
 #import "FetchInterceptorProtocol.h"
@@ -503,4 +504,3 @@ CDVServiceWorker *singletonInstance = nil; // TODO: Something better
 }
 
 @end
-
