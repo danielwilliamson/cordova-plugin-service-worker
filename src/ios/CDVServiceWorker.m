@@ -20,7 +20,6 @@
 #import <Cordova/CDV.h>
 #import <JavaScriptCore/JavaScriptCore.h>
 #import <CommonCrypto/CommonDigest.h>
-#import "NSData+Base64.h"
 #import "CDVServiceWorker.h"
 #import "FetchConnectionDelegate.h"
 #import "FetchInterceptorProtocol.h"
@@ -283,7 +282,7 @@ CDVServiceWorker *singletonInstance = nil; // TODO: Something better
         [weakSelf.requestDelegates removeObjectForKey:requestId];
 
         // Convert the response body to base64.
-        NSData *data = [NSData dataFromBase64String:[response[@"body"] toString]];
+        NSData *data = [[NSData alloc] initWithBase64EncodedString:[response[@"body"] toString] options:0];
         JSValue *headers = response[@"headers"];
         NSString *mimeType = [headers[@"mimeType"] toString];
         NSString *encoding = @"utf-8";
