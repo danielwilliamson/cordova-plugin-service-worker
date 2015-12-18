@@ -561,6 +561,9 @@ NSLog(@"Using short url: %@", shortUrlRequest.URL);
 -(NSMutableURLRequest *)nativeRequestFromDictionary:(NSDictionary *)requestDictionary
 {
     NSString *urlString = requestDictionary[@"url"];
+    NSURL *url = [[NSURL URLWithString:urlString] URLByStandardizingPath];
+    urlString = [url absoluteString];
+
     if ([urlString hasPrefix:rootPath_]) {
         urlString = [NSString stringWithFormat:@"%@%@", self.absoluteScope, [urlString substringFromIndex:[rootPath_ length]]];
     }
