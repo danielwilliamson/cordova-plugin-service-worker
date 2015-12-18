@@ -79,7 +79,10 @@ Cache.prototype.keys = function(request, options) {
         var requests = [];
         for (var i=0; i<dicts.length; i++) {
             var requestDict = dicts[i];
-            requests.push(new Request(requestDict.method, requestDict.url, requestDict.headers));
+            requests.push(new Request(requestDict.url, {
+              method: requestDict.method,
+              headers: requestDict.headers
+            }));
         }
         resolve(requests);
     };
@@ -141,4 +144,3 @@ CacheStorage.prototype.keys = function() {
 };
 
 var caches = new CacheStorage();
-
