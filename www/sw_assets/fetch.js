@@ -275,6 +275,11 @@ FetchEvent.prototype.default = function(ev) {
       this.url = input
     }
 
+    // Absolutize the url
+    var atag = document.createElement('a');
+    atag.href = this.url;
+    this.url = atag.href;
+
     this.credentials = options.credentials || this.credentials || 'omit'
     if (options.headers || !this.headers) {
       this.headers = new Headers(options.headers)
@@ -332,6 +337,11 @@ FetchEvent.prototype.default = function(ev) {
     this.statusText = options.statusText
     this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
     this.url = options.url || ''
+
+    // Absoultize the url
+    var atag = document.createElement('a');
+    atag.href = this.url;
+    this.url = atag.href;
   }
 
   Body.call(Response.prototype)
