@@ -27,8 +27,15 @@ FetchEvent.prototype.respondWith = function(response) {
 
   // Send the response to native.
   var convertAndHandle = function(response) {
-    response.body = window.btoa(response.body);
-    handleFetchResponse(requestId, response);
+    response.text().then(function(body) {
+      // Extract the headers
+      var headers = {};
+      response.headers.forEach(function(value, name) {
+        headers[name] = value;
+      });
+
+      handleFetchResponse(requestId, response.url, response.status, headers, window.btoa(body));
+    });
   };
 
   // TODO: Find a better way to determine whether `response` is a promise.

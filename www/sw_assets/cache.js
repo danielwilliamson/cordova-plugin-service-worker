@@ -8,7 +8,11 @@ Cache.prototype.match = function(request, options) {
   return new Promise(function(resolve, reject) {
     var encodeResponse = function(response) {
       if (response) {
-        response = new Response(window.atob(response.body), response.url, response.status, response.headers);
+        response = new Response(window.atob(response.body), {
+          url: response.url,
+          status: response.status,
+          headers: response.headers
+        });
       }
       return resolve(response);
     };
@@ -25,7 +29,11 @@ Cache.prototype.matchAll = function(request, options) {
         var encodedResponses = [];
         for (var i=0; i < responses.length; ++i) {
           var response = responses[i];
-          encodedReponses.push(new Response(window.atob(response.body), response.url, response.status, response.headers));
+          encodedReponses.push(new Response(window.atob(response.body), {
+            url: response.url,
+            status: response.status,
+            headers: response.headers
+          }));
         }
         return resolve(encodedResponses);
       }
@@ -104,7 +112,11 @@ CacheStorage.prototype.match = function(request, options) {
   return new Promise(function(resolve, reject) {
     var encodeResponse = function(response) {
       if (response) {
-        response = new Response(window.atob(response.body), response.url, response.status, response.headers);
+        response = new Response(window.atob(response.body), {
+          url: response.url,
+          status: response.status,
+          headers: response.headers
+        });
       }
       return resolve(response);
     };

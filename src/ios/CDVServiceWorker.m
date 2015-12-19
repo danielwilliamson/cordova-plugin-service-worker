@@ -130,7 +130,7 @@ CDVServiceWorker *singletonInstance = nil; // TODO: Something better
     self.workerWebView = [[UIWebView alloc] init]; // Headless
     [self.viewController.view addSubview:self.workerWebView];
     [self.workerWebView setDelegate:self];
-    [self.workerWebView loadHTMLString:@"<html><title>Service Worker Page</title></html>" baseURL:[NSURL fileURLWithPath:[[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"GeneratedWorker.html"]]];
+    [self.workerWebView loadHTMLString:@"<html><title>Service Worker Page</title></html>" baseURL:[NSURL fileURLWithPath:[[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"www/GeneratedWorker.html"]]];
 }
 
 # pragma mark ServiceWorker Functions
@@ -274,7 +274,7 @@ CDVServiceWorker *singletonInstance = nil; // TODO: Something better
         [weakSelf initiateServiceWorker];
     };
 
-    self.context[@"handleFetchResponse"] = ^(JSValue *jsRequestId, JSValue *response) {
+    self.context[@"handleFetchResponse"] = ^(JSValue *jsRequestId, JSValue *jsUrl, JSValue *jsStatus, JSValue *jsHeaders, JSValue *jsBody) {
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
         [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
         NSNumber *requestId = [formatter numberFromString:[jsRequestId toString]];
@@ -282,17 +282,15 @@ CDVServiceWorker *singletonInstance = nil; // TODO: Something better
         [weakSelf.requestDelegates removeObjectForKey:requestId];
 
         // Convert the response body to base64.
-        NSData *data = [[NSData alloc] initWithBase64EncodedString:[response[@"body"] toString] options:0];
-        JSValue *headers = response[@"headers"];
-        NSString *mimeType = [headers[@"mimeType"] toString];
-        NSString *encoding = @"utf-8";
-        NSString *url = [response[@"url"] toString]; // TODO: Can this ever be different than the request url? if not, don't allow it to be overridden
+        NSData *data = [[NSData alloc] initWithBase64EncodedString:[jsBody toString] options:0];
+        NSDictionary *headers = [jsHeaders toDictionary];
+        NSInteger status = [jsStatus toInt32];
+        NSString *url = [jsUrl toString]; // TODO: Can this ever be different than the request url? if not, don't allow it to be overridden
 
-        NSURLResponse *urlResponse = [[NSURLResponse alloc] initWithURL:[NSURL URLWithString:url]
-                                                            MIMEType:mimeType
-                                               expectedContentLength:data.length
-                                                    textEncodingName:encoding];
-
+        NSHTTPURLResponse *urlResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:url]
+                                                                     statusCode:status
+                                                                    HTTPVersion:@"HTTP/1.1"
+                                                                   headerFields:headers];
         [interceptor handleAResponse:urlResponse withSomeData:data];
     };
 
