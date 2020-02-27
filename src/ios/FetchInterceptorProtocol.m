@@ -29,7 +29,7 @@ static int64_t requestCount = 0;
 
 + (BOOL)canInitWithRequest:(NSURLRequest *)request {
     // We don't want to intercept any requests for the worker page.
-    if ([[[request URL] absoluteString] hasSuffix:@"GeneratedWorker.html"]) {
+    if ([[[request mainDocumentURL] absoluteString] hasSuffix:@"GeneratedWorker.html"]) {
         return NO;
     }
 
@@ -109,4 +109,3 @@ static int64_t requestCount = 0;
 }
 
 @end
-
